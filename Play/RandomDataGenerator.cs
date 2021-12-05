@@ -1,6 +1,6 @@
 ﻿using Bogus;
 
-namespace Play
+namespace Seeder
 {
     public class RandomDataGenerator
     {

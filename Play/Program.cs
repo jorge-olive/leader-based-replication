@@ -1,5 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-using Play;
+using Seeder;
 
 var hostBuilder = Host.CreateDefaultBuilder(args);
 

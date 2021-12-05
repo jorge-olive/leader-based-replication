@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
-namespace Play;
+namespace Seeder;
 
 public class MyDbContext: DbContext
 {

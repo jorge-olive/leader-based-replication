@@ -1,7 +1,7 @@
 ﻿using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Running;
 using Microsoft.EntityFrameworkCore;
-using Play;
+using Seeder;
 
 var summary = BenchmarkRunner.Run<SplitQueryBenchmarking>();
 
