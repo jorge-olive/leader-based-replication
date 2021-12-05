@@ -6,6 +6,7 @@ using Seeder;
 var summary = BenchmarkRunner.Run<SplitQueryBenchmarking>();
 
 [RPlotExporter]
+[MemoryDiagnoser]
 public class SplitQueryBenchmarking
 {
     private MyDbContext _context;
