@@ -16,3 +16,9 @@ docker run -d --network pgnet-v replica_data:/var/lib/postgresql/data -e POSTGRE
 docker run -it --rm --network pgnet -v replica_data2:/var/lib/postgresql/data --name pg_replica_init docker.io/postgres:14 sh -c 'pg_basebackup -h pg_primary -U replicator -p 5432 -D $PGDATA -Fp -Xs -P -R -W';
 
 docker run -d --network pgnet-v replica_data2:/var/lib/postgresql/data -e POSTGRES_PASSWORD=secret -p 5480:5432 --name pg_replica2 docker.io/postgres:14;
+
+docker pull dpage/pgadmin4
+docker run -p 5050:80 \
+    -e "PGADMIN_DEFAULT_EMAIL=user@domain.com" \
+    -e "PGADMIN_DEFAULT_PASSWORD=SuperSecret" \
+    -d dpage/pgadmin4
