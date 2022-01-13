@@ -22,13 +22,23 @@ hostBuilder.ConfigureServices((ctx, services) =>
 
 var app = hostBuilder.Build();
 
-//using (var scope = app.Services.CreateScope())
-//{
-//    var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-//    db.Database.Migrate();
-//}
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<DbContextFactory>().GetApplicationDbContext();
+    db.Database.Migrate();
+}
 
-var continuousQueryAsync = Task.Run(async () =>
+var continuousDataCreation = Task.Run(async () =>
+{
+    while (true)
+        using (var scope = app.Services.CreateScope())
+        {
+            var dataSeeder = scope.ServiceProvider.GetRequiredService<RandomDataGenerator>();
+            await dataSeeder.Run(CancellationToken.None);
+        }
+});
+
+var continuousQueryLoad = Parallel.ForEachAsync(Enumerable.Range(1,4), new ParallelOptions() {  MaxDegreeOfParallelism = 2 }, async (value, token)  =>
 {
     var random = Random.Shared;
     var range = Enumerable.Range(random.Next(1, 10000), random.Next(1, 20));
@@ -41,14 +51,5 @@ var continuousQueryAsync = Task.Run(async () =>
         }
 });
 
-var creationNewBlogs = Task.Run(async () =>
-{
-    while (true)
-        using (var scope = app.Services.CreateScope())
-        {
-            var dataSeeder = scope.ServiceProvider.GetRequiredService<RandomDataGenerator>();
-            await dataSeeder.Run(CancellationToken.None);
-        }
-});
 
-await Task.WhenAll(continuousQueryAsync);
+await Task.WhenAll(continuousQueryLoad, continuousDataCreation);
