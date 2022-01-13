@@ -17,9 +17,9 @@ public class SplitQueryBenchmarking
     [GlobalSetup]
     public void Setup()
     {
-        var dbContextOptions = new DbContextOptionsBuilder<MyDbContext>()
-        .UseNpgsql("Host=localhost;Database=my_db;Username=postgres;Password=testing");
-        _context = new MyDbContext(dbContextOptions.Options);
+        var dbContextOptions = new DbContextOptionsBuilder<AppDbContext>()
+        .UseNpgsql("Host=localhost:5432;Database=postgres;Username=postgres;Password=secret");
+        _context = new AppDbContext(dbContextOptions.Options);
     }
 
     [Benchmark]

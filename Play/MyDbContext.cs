@@ -2,9 +2,42 @@
 
 namespace Seeder;
 
-public class MyDbContext: DbContext
+public class ReadOnlyDbContext : MyDbContext
 {
-    public MyDbContext(DbContextOptions<MyDbContext> options) : base(options)
+    public ReadOnlyDbContext(DbContextOptions<ReadOnlyDbContext> options) : base(options)
+    {
+    }
+
+    internal ReadOnlyDbContext(DbContextOptions options) : base(options)
+    {
+    }
+
+    public override int SaveChanges()
+    {
+        throw new InvalidOperationException();
+    }
+}
+
+public class AppDbContext : MyDbContext
+{
+    public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
+    {
+    }
+
+    internal AppDbContext(DbContextOptions options) : base(options)
+    {
+    }
+}
+
+public abstract class MyDbContext: DbContext
+{
+    protected MyDbContext(DbContextOptions<MyDbContext> options)
+            : base(options)
+    {
+    }
+
+    protected MyDbContext(DbContextOptions options)
+        : base(options)
     {
     }
 
@@ -17,7 +50,6 @@ public class MyDbContext: DbContext
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(BlogEntityTypeConfiguration).Assembly);
     }
 }
-
 
 public class Blog
 {
