@@ -11,9 +11,9 @@ On the other hand, asynchronous favours availability at the price of eventual co
 The pros of this solution are obvious, as it allows to easily add new readonly nodes to physically distribute the query load. But, unfortunately, there're drawbacks too, as the replication lag has to be closely monitored if the data 
 that the replicas will be serving needs to be very up-to-date. If a replica's replication lag starts growing, the replica should be retired, adding significant load to the remaining actors. There're also some other concerns to consider, such as 
 
-- Beware of [read your own writes](https://docs.oracle.com/cd/E17076_05/html/gsg_db_rep/C/rywc.html) kind of scenarios. 
+- Beware of [read your own writes](https://docs.oracle.com/cd/E17076_05/html/gsg_db_rep/C/rywc.html) casuistics. 
 - [Monotonic reads](https://jepsen.io/consistency/models/monotonic-reads#:~:text=Monotonic%20reads%20ensures%20that%20if,reads%20by%20the%20same%20process.) are not warranted.
-- Being careful that within any transactional application flow, if there's a write all the data has to be exclusively retrieved from the leader - No QueryContext + DbContext mixed usages - 
+- This might be obvious, but you've to be careful that within any transactional application flow with writes, all the data has to be retrieved from the leader.
 - Migration handling might be sketchy.
 - What happens if the leader node goes down?
 
