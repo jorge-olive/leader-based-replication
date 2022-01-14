@@ -1,6 +1,6 @@
 # Entity Framework Core and Leader-Followers Data Replication
 ## Introduction
-In order to horizontally scale a RDBMS-based data tier application, a common solution is to asymetrically split the load between different nodes, in such a way that queries are routed to real-time replicated databases and the writes to the "leader" one. This leaves it with mainly two responsibilities:
+In order to horizontally scale a RDBMS-based data tier application with a high query/write ratio a common solution is to asymetrically split the load between different nodes, in such a way that queries are routed to real-time replicated databases and the writes to the "leader" one. This leaves it with mainly two responsibilities:
 
 - Process all the writes. 
 - Ship the WAL (write ahead log ) to the connected replicas. 
