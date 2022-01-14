@@ -1,7 +1,6 @@
 # Entity Framework Core and Leader-Followers Data Replication
 ## Introduction
-In order to horizontally scale a RDBMS-based data tier application, a common solution is splitting the load between different nodes, in such a way that queries are routed to real-time replicated databases. 
-This leaves a so called "leader" node with mainly two responsibilities:
+In order to horizontally scale a RDBMS-based data tier application, a common solution is to asymetrically split the load between different nodes, in such a way that queries are routed to real-time replicated databases and the writes to the "leader" one. This leaves it with mainly two responsibilities:
 
 - Process all the writes. 
 - Ship the WAL (write ahead log ) to the connected replicas. 
@@ -16,6 +15,7 @@ that the replicas will be serving needs to be very up-to-date. If a replica's re
 - [Monotonic reads](https://jepsen.io/consistency/models/monotonic-reads#:~:text=Monotonic%20reads%20ensures%20that%20if,reads%20by%20the%20same%20process.) are not warranted.
 - Being careful that within any transactional application flow, if there's a write all the data has to be exclusively retrieved from the leader - No QueryContext + DbContext mixed usages - 
 - Migration handling might be sketchy.
+- What happens if the leader node goes down?
 
 As per this POC / experiment, the replication lag tends to be close to zero, unless the host system runs out of resources. This is easily reproducible modifying the load parameters of the main program.
 
