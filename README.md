@@ -78,5 +78,5 @@ There, it's a matter of creating three server connections with the "postgres" / 
 I found interesting that each replica creates a process in the master node using the "replicator" user that is set up for this task:
 
 
-
+![What is this](pgadmin-screenshot.JPG)
 
