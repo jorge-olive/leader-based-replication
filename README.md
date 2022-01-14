@@ -17,8 +17,6 @@ that the replicas will be serving needs to be very up-to-date. If a replica's re
 - Migration handling might be sketchy.
 - What happens if the leader node goes down?
 
-As per this POC / experiment, the replication lag tends to be close to zero, unless the host system runs out of resources. This is easily reproducible modifying the load parameters of the main program.
-
 ## Experiment / POC
 
 Here I am setting up a docker based  leader + two replicas postgresql cluster. In order to start it, run the commands in `postgresScript.ps1`; you will be promted a few times to introduce the password which is "secret" . 
@@ -70,7 +68,7 @@ public ReadOnlyDbContext GetReadOnlyDbContext()
 It's worth noting that EF Core doesn't have a native solution to consume this kind of architecures, so this mechanism had to be implemented. 
 Though I am doing this at application side, you would typically do this at proxy level with some tech such as pgpool or HaProxy. I am not sure how you would retire a unsynchronized replica this way, probably you would need to do this at application level.
 
-In order to monitor the replication lag, there's a small script in LagCheck.ps1 that runs a query periodically over each replica. You can also monitor the nodes cpu usage with the `docker stats` command.
+In order to monitor the replication lag, there's a small script in LagCheck.ps1 that runs a query periodically over each replica. You can also monitor the nodes cpu usage with the `docker stats` command. As per this POC / experiment, the replication lag tends to be close to zero, unless the host system runs out of resources. This is easily reproducible modifying the load parameters of the main program.
 
 Lastly, the first script also creates a pgAdmin instance (db Client ) on which you can log by accesing to localhost:5050 with the credentials "user@domain.com"/"SuperSecret". 
 There, it's a matter of creating three server connections with the "postgres" / "secret" user /PWD to the "host.docker.internal" localhosts with ports 5432, 5480 and 5490. 
