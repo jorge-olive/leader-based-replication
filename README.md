@@ -21,10 +21,10 @@ As per this POC / experiment, the replication lag tends to be close to zero, unl
 
 ## Experiment / POC
 
-Here I am setting up a leader + two replicas docker based postgresql cluster. In order to start it, run the commands in `postgresScript.ps1`; you will be promted to introduce the password which is "secret" . 
+Here I am setting up a docker based  leader + two replicas postgresql cluster. In order to start it, run the commands in `postgresScript.ps1`; you will be promted a few times to introduce the password which is "secret" . 
 On the application side, it already includes the connection strings to these, so it's a matter of running it.
 
-Once you start the program, a very simple Blog/Post/Comment will be configured with a the migrations will be executed on the leader node; Shortly they are replicated to both replicas. Once the command is executed, two different threads will start adding load to the system:
+Once you start the program, a very simple Blog/Post/Comment model will be configured, and the migrations will be executed on the leader node. The replication process will take care of reproducing these tables in both replicas. Once the setup is finished, two different threads will start adding load to the system:
 
 - A first task will start creating data, with two parallel subtasks:
 
