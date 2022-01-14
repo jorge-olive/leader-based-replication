@@ -1,17 +1,12 @@
 using Microsoft.EntityFrameworkCore;
-using Seeder;
+using POC;
 
 var hostBuilder = Host.CreateDefaultBuilder(args);
 
 hostBuilder.ConfigureServices((ctx, services) =>
 {
     services.AddSingleton<DbContextFactory>();
-
-    //services.AddDbContext<ReadOnlyDbContext>(options =>
-    //    options.UseNpgsql(ctx.Configuration.GetConnectionString("BloggingContextReadOnly")));
-
     services.AddScoped<RandomDataGenerator>();
-    
 })
     .ConfigureLogging((hostingContext, logging) =>
     {
@@ -28,17 +23,18 @@ using (var scope = app.Services.CreateScope())
     db.Database.Migrate();
 }
 
-var continuousDataCreation = Task.Run(async () =>
+var continuousDataCreation = Parallel.ForEachAsync(Enumerable.Range(1, 2), new ParallelOptions() { MaxDegreeOfParallelism = 2 }, async (value, token) =>
 {
     while (true)
         using (var scope = app.Services.CreateScope())
         {
             var dataSeeder = scope.ServiceProvider.GetRequiredService<RandomDataGenerator>();
             await dataSeeder.Run(CancellationToken.None);
+            Thread.Sleep(Random.Shared.Next(100, 2000));
         }
 });
 
-var continuousQueryLoad = Parallel.ForEachAsync(Enumerable.Range(1,4), new ParallelOptions() {  MaxDegreeOfParallelism = 2 }, async (value, token)  =>
+var continuousQueryLoad = Parallel.ForEachAsync(Enumerable.Range(1,100), new ParallelOptions() {  MaxDegreeOfParallelism = 100 }, async (value, token)  =>
 {
     var random = Random.Shared;
     var range = Enumerable.Range(random.Next(1, 10000), random.Next(1, 20));
@@ -47,9 +43,9 @@ var continuousQueryLoad = Parallel.ForEachAsync(Enumerable.Range(1,4), new Paral
         using (var scope = app.Services.CreateScope())
         {
             var dbContext = scope.ServiceProvider.GetRequiredService<DbContextFactory>().GetReadOnlyDbContext();
-            var blogs = await dbContext.Posts.Where(x => x.Content.StartsWith("A")).ToListAsync();
+            await dbContext.Posts.Skip(Random.Shared.Next(1, 1000)).Take(Random.Shared.Next(1,20)).Include(x => x.Comments).ToListAsync();
         }
 });
 
-
+//INFINITE RUN LOOP
 await Task.WhenAll(continuousQueryLoad, continuousDataCreation);

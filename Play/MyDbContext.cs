@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
-namespace Seeder;
+namespace POC;
 
 public class ReadOnlyDbContext : MyDbContext
 {
@@ -18,13 +18,13 @@ public class ReadOnlyDbContext : MyDbContext
     }
 }
 
-public class AppDbContext : MyDbContext
+public class WriteDbContext : MyDbContext
 {
-    public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
+    public WriteDbContext(DbContextOptions<WriteDbContext> options) : base(options)
     {
     }
 
-    internal AppDbContext(DbContextOptions options) : base(options)
+    internal WriteDbContext(DbContextOptions options) : base(options)
     {
     }
 }

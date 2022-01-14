@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Seeder
+namespace POC
 {
     public class BlogEntityTypeConfiguration : IEntityTypeConfiguration<Blog>
     {

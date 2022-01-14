@@ -1,6 +1,6 @@
 ﻿using Bogus;
 
-namespace Seeder
+namespace POC
 {
     public class RandomDataGenerator
     {

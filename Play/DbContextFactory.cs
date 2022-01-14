@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Seeder;
+using POC;
 //SINGLETON
 class DbContextFactory
 {
@@ -24,12 +24,12 @@ class DbContextFactory
         return new ReadOnlyDbContext(optionsBuilder.Options);
     }
 
-    public AppDbContext GetApplicationDbContext()
+    public WriteDbContext GetApplicationDbContext()
     {
-        var optionsBuilder = new DbContextOptionsBuilder<AppDbContext>();
+        var optionsBuilder = new DbContextOptionsBuilder<WriteDbContext>();
         optionsBuilder.UseNpgsql(_masterConnectionString);
 
-        return new AppDbContext(optionsBuilder.Options);
+        return new WriteDbContext(optionsBuilder.Options);
     }
 
     //TODO LoadBalancer
