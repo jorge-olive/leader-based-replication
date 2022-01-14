@@ -4,7 +4,7 @@ In order to horizontally scale a RDBMS-based data tier application, a common sol
 This leaves a so called "leader" node with mainly two responsibilities:
 
 - Process all the writes. 
-- Ship the WAL (write ahead log to the connected replicas ) 
+- Ship the WAL (write ahead log ) to the connected replicas. 
 
 Postgresql supports [replication](https://www.postgresql.org/docs/9.2/runtime-config-replication.html) since version 9, both in asynchrnous (default) or synchronous modes. Synchronous executes replication within the write transaction, so a distributed lock is in fact happening: if for some reason a replica takes too long to replicate, clients of the leader node will be effectively blocked. 
 On the other hand, asynchronous favours availability at the price of eventual consistency of the data.
